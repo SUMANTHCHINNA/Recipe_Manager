@@ -44,14 +44,7 @@ const getAllRecipes = async (req, res) => {
     try {
         const id = req.user.user_id
         const a = await getAllDish(id)
-        if (a) {
-            res.status(201).json({ status: true, message: a })
-        }
-        else {
-            res.status(400).json({ status: true, message: `No recipes found for the user` })
-
-        }
-
+        res.status(201).json({ status: true, message: a })
     } catch (error) {
         res.status(500).json({ status: false, message: error.message })
     }

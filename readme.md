@@ -3,6 +3,21 @@
 ## **Project Overview**
 The **Recipe Management System** is a web application that allows users to **store, manage, and mark their favorite recipes**. It provides functionality for user authentication, recipe - create, update, delete and the ability to mark recipes as favorites. The system uses **Node.js, Express.js, PostgreSQL**, and follows a structured database schema.
 
+## API Endpoints
+### User APIs
+- **`POST /user/register`** - Register a new user.
+- **`POST /user/login`** - Authenticate user and return JWT.
+
+## Recipe APIs
+- **`POST /recipe/add`** - Add a new recipe.
+- **`GET /recipe/all`** - Get all recipes.
+- **`GET /recipe/:id`** - Get a recipe by ID.
+- **`PATCH /recipe/:id`** - Update a recipe.
+- **`DELETE /recipe/:id`** - Delete a recipe.
+
+- **`POST /recipe/fav/:id`** - Add a recipe to favorites.
+- **`GET /recipe/fav`** - Get all favorite recipes.
+- **`DELETE /recipe/fav/:id`** - Remove a recipe from favorites.
 
 
 ## User Management API's
@@ -12,8 +27,8 @@ The **Recipe Management System** is a web application that allows users to **sto
 -  **Request Body Example:**
     ```json
     {
-      "username": "sumanth",
-      "email": "sumanth@gmail.com",
+      "username": "user",
+      "email": "user@gmail.com",
       "password": "password123"
     }
     ```

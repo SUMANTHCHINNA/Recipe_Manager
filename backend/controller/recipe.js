@@ -1,4 +1,4 @@
-const { addDish, checkDish, checkId, deleteDish, getAllDish, updateDish, addDishFav, deleteDishFav, getAllFavDish } = require('../model/index')
+const { addDish, checkDish, checkId, deleteDish, getAllDish, updateDish, addDishFav, deleteDishFav, getAllFavDish, getOneDish, checkFavId } = require('../model/index')
 
 const addRecipe = async (req, res) => {
     try {
@@ -59,7 +59,6 @@ const updateRecipe = async (req, res) => {
             const { title, ingredients, description, steps } = req.body
             await updateDish({ title, ingredients, description, steps, u_id, r_id })
             res.status(201).json({ status: true, message: `Recipe updated successfully` })
-
         }
         else {
             res.status(404).json({ status: false, message: `Recipe Not found` })
@@ -67,7 +66,6 @@ const updateRecipe = async (req, res) => {
     } catch (error) {
         res.status(500).json({ status: false, message: error.message })
     }
-
 }
 
 const AddFav = async (req, res) => {
@@ -76,17 +74,20 @@ const AddFav = async (req, res) => {
         const u_id = req.user.user_id
         const c = await checkId(u_id, r_id)
         if (c) {
-            await addDishFav(r_id, u_id)
-            res.status(201).json({ status: true, message: `Recipe Added to Favorite List` })
+            const fc = await checkFavId(r_id, u_id)
+            if (fc) {
+                await addDishFav(r_id, u_id)
+                res.status(201).json({ status: true, message: `Recipe Added to Favorite List` })
+            }
+            else {
+                res.status(400).json({ status: true, message: `Recipe Already Added in Favorite List` })
+            }
         }
         else {
             res.status(404).json({ status: false, message: `Recipe Not found` })
         }
-
-
     } catch (error) {
         res.status(500).json({ status: false, message: error.message })
-
     }
 }
 
@@ -117,6 +118,22 @@ const getFav = async (req, res) => {
     }
 }
 
+const getOneRecipe = async (req, res) => {
+    try {
+
+        const u_id = req.user.user_id
+        const r_id = req.params.id
+        const c = await checkId(u_id, r_id)
+        if (c) {
+            const f = await getOneDish(u_id, r_id)
+            res.status(201).json({ status: true, message: f })
+        }
+
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message })
+    }
+}
+
 module.exports = {
     addRecipe,
     deleteRecipe,
@@ -124,5 +141,6 @@ module.exports = {
     updateRecipe,
     AddFav,
     deleteFav,
-    getFav
+    getFav,
+    getOneRecipe
 }

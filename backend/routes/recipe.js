@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../middleware/auth')
-const { addRecipe, deleteRecipe, getAllRecipes, updateRecipe, AddFav, deleteFav, getFav } = require('../controller/recipe')
+const { addRecipe, deleteRecipe, getAllRecipes, updateRecipe, AddFav, deleteFav, getFav, getOneRecipe } = require('../controller/recipe')
 
 router.use(auth)
 
@@ -13,6 +13,8 @@ router.patch('/recipe/:id', updateRecipe)
 router.post('/recipe/fav/:id', AddFav)
 router.delete('/recipe/fav/:id', deleteFav)
 router.get('/recipe/fav', getFav)
+router.get('/recipe/:id', getOneRecipe)
+
 
 
 

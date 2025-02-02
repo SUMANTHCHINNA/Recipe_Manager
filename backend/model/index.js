@@ -141,15 +141,35 @@ const deleteDishFav = async (r_id, u_id) => {
 
 const getAllFavDish = async (u_id) => {
     try {
-        const result = await client.query(`SELECT recipes.title,recipes.ingredients,recipes.description,recipes.steps,recipes,recipes.user_id
+        const result = await client.query(`SELECT recipes.title,recipes.ingredients,recipes.description,recipes.steps,recipes.user_id
             FROM recipes
-            RIGHT JOIN favorite_recipes ON favorite_recipes.recipeId = recipes.recipeId
+            INNER JOIN favorite_recipes ON favorite_recipes.recipeId = recipes.recipeId
             WHERE recipes.user_id = $1`, [u_id])
         return result.rows
     } catch (error) {
         console.error(`Error in fetching All Recipes from favorite ${error}`)
 
     }
+}
+
+const getOneDish = async (u_id, r_id) => {
+    try {
+        const result = await client.query(`SELECT * FROM recipes WHERE recipeId = $1 AND user_id = $2`, [r_id, u_id])
+        return result.rows[0]
+    } catch (error) {
+        console.error(`Error in fetching specific recipe ${error}`)
+    }
+
+}
+
+const checkFavId = async (r_id, u_id) => {
+    try {
+        const result = await client.query(`SELECT * FROM favorite_recipes WHERE recipeId = $1 and user_id = $2`, [r_id, u_id])
+        return result.rows.length == 0
+    } catch (error) {
+        console.error(`Error checking favorite_recipes id ${error}`)
+    }
+
 }
 
 module.exports = {
@@ -167,5 +187,7 @@ module.exports = {
     updateDish,
     addDishFav,
     deleteDishFav,
-    getAllFavDish
+    getAllFavDish,
+    getOneDish,
+    checkFavId
 };
